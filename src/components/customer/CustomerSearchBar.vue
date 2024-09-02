@@ -1,18 +1,28 @@
 <script lang="ts" setup>
+import api from '@/api/endpoints';
+import type { Customer } from '@/types';
 import { ref, watch } from 'vue';
-
-const handleSubmit = (event: Event) => {
-  const form = new FormData(event.target as HTMLFormElement);
-  // TODO - Implement creation in DB
-  console.log(form.get('item'));
-};
+import debounce from 'lodash/debounce';
+import { createCustomerService } from '@/api/services/customer';
 
 const input = ref('');
 
-watch(input, (newInput) => {
-  // TODO - Search the values with WebSockets
-  console.log(newInput);
-});
+const handleSubmit = () => {
+  try {
+    // TODO - set selected customer
+    const customer = createCustomerService(input.value);
+  } catch (e) {
+    // TODO - toast an error
+    console.error(e);
+  }
+};
+
+watch(
+  input,
+  debounce((newInput: string) => {
+    
+  }),
+);
 </script>
 
 <template>
@@ -21,7 +31,7 @@ watch(input, (newInput) => {
       <label class="mr-2 grow flex items-center">
         <i class="fi fi-tr-search-dollar" alt="Search customer" />
         <input
-          name="item"
+          name="customer"
           class="divide-x-2 m-2 bg-transparent h-fit focus:outline-none grow"
           type="search"
           placeholder="Search customer"
