@@ -1,12 +1,28 @@
 <script lang="ts" setup>
-import api from '@/api/endpoints';
+import {
+  createCustomerService,
+  searchCustomerSocketService,
+} from '@/api/services/customer';
 import type { Customer } from '@/types';
-import { ref, watch } from 'vue';
 import debounce from 'lodash/debounce';
-import { createCustomerService } from '@/api/services/customer';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 
 const input = ref('');
+const customersFounded = ref<Customer[]>([]);
 
+// #region Lifecycle
+onMounted(() => {
+  searchCustomerSocketService.connect();
+  searchCustomerSocketService.listen(
+    (customers) => (customersFounded.value = customers),
+  );
+});
+onUnmounted(() => {
+  searchCustomerSocketService.disconnect();
+});
+// #endregion
+
+// #region Events
 const handleSubmit = () => {
   try {
     // TODO - set selected customer
@@ -16,11 +32,12 @@ const handleSubmit = () => {
     console.error(e);
   }
 };
+// #endregion
 
 watch(
   input,
   debounce((newInput: string) => {
-    
+    searchCustomerSocketService.query(newInput);
   }),
 );
 </script>
