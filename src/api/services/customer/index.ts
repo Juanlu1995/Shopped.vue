@@ -66,4 +66,13 @@ export const searchCustomerSocketService: SearchCustomerSocketServiceReturn = {
       console.error(e);
     }
   },
+  stopListen: () => {
+    try {
+      if (socket?.active) {
+        return socket.removeAllListeners('foundedCustomers');
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  },
 };

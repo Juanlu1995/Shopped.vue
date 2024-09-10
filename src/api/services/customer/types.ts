@@ -5,6 +5,7 @@ export interface SearchCustomerSocketServiceReturn {
   disconnect(): void;
   query(name: string): void;
   listen(callback: (customer: Customer[]) => void): void;
+  stopListen(): void;
   reconnect(callback: () => void): void;
 }
 

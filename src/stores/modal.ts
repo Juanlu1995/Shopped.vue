@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
-const modalStore = defineStore('modal', () => {
+const useModalStore = defineStore('modal', () => {
   const isModalShown = ref(false);
   const setModalShown = (isShown: boolean) => {
     isModalShown.value = isShown;
@@ -9,4 +9,4 @@ const modalStore = defineStore('modal', () => {
   return { isModalShown, setModalShown };
 });
 
-export default modalStore;
+export default useModalStore;
