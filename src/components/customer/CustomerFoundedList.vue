@@ -26,7 +26,7 @@ const handleClick = (customer: Customer) => {
       <li
         v-for="customer in customers"
         :key="customer.id"
-        class="text-gray-400 leading-4 grow py-4 px-2 hover:bg-slate-200 active:ring-slate-300 active:ring-2 transition-all duration-75 hover:scale-x-[1.010]"
+        class="text-gray-600 leading-4 grow py-4 px-2 hover:bg-slate-200 active:ring-slate-300 active:ring-2 transition-all duration-75 hover:scale-x-[1.010]"
         @click="handleClick(customer)">
         {{ customer.name }}
       </li>
