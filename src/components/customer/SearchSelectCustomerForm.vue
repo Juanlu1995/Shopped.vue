@@ -6,10 +6,11 @@ import {
 import { useCustomerStore } from '@/stores/useCustomerStore';
 import type { Customer } from '@/types';
 import debounce from 'lodash/debounce';
+import { storeToRefs } from 'pinia';
 import { getCurrentInstance, onMounted, onUnmounted, ref, watch } from 'vue';
 
-const { customers, setCustomerSelected, setCustomers } = useCustomerStore();
-const customerInput = ref('');
+const { customers, setCustomerSelected, setCustomers, setCustomerSearchText } = useCustomerStore();
+const {customerSearch} = storeToRefs(useCustomerStore());
 const instance = getCurrentInstance();
 const uuid = ref(instance?.uid.toString());
 
@@ -46,15 +47,17 @@ onUnmounted(() => {
 
 const handleSubmit = async () => {
   try {
-    const customer = await createCustomerService(customerInput.value);
+    const customer = await createCustomerService(customerSearch.value);
     setCustomerSelected(customer);
+    setCustomerSearchText('');
+    cleanCustomerSearch();
   } catch (e) {
     // TODO - toast an error
     console.error(e);
   }
 };
 
-watch(customerInput, (newInput) => {
+watch(customerSearch, (newInput) => {
   if (newInput) {
     socketListen();
     debounceInput(newInput);
@@ -73,14 +76,14 @@ watch(customerInput, (newInput) => {
         :class="{ 'rounded-b-none': customers.length }"
         class="py-4 grow peer px-2 bg-slate-50 rounded-md h-fit focus:outline-none border"
         type="search"
-        v-model.trim="customerInput" />
+        v-model.trim="customerSearch" />
       <label
         :for="uuid"
         class="-top-7 absolute pointer-events-none mb-0 max-w-[90%] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 dark:text-neutral-400 dark:peer-focus:text-primary"
         :class="{
-          'scale-75 -left-2': customerInput.length,
+          'scale-75 -left-2': customerSearch.length,
           'peer-focus:-translate-x-2 peer-[&:not(:focus)]:translate-x-2 peer-[&:not(:focus)]:translate-y-9 transition-all duration-150 ease-out peer-focus:scale-75 peer-focus:text-primary motion-reduce:transition-none':
-            !customerInput,
+            !customerSearch,
         }">
         Search / Create customer
       </label>
@@ -91,12 +94,3 @@ watch(customerInput, (newInput) => {
     </button>
   </form>
 </template>
-<style>
-@import url('https://cdn-uicons.flaticon.com/2.5.1/uicons-thin-rounded/css/uicons-thin-rounded.css');
-input[type='search']::-webkit-search-decoration,
-input[type='search']::-webkit-search-cancel-button,
-input[type='search']::-webkit-search-results-button,
-input[type='search']::-webkit-search-results-decoration {
-  -webkit-appearance: none;
-}
-</style>
