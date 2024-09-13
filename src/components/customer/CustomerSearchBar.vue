@@ -17,11 +17,11 @@ const handleCustomerClick = (customer: Customer) => {
 <template>
   <search
     role="search"
-    class="px-4 py-4 bg-gray-100 rounded-md border-2 pb-4 grid grid-cols-12 gap-1">
-    <div class="col-span-3 flex flex-col">
+    class="px-2 py-4 md:px-4 bg-gray-100 rounded-md border-2 space-y-2">
+    <div class="col-span-3 flex flex-col px-1">
       <SelectedCustomer />
     </div>
-    <div class="col-span-9 flex flex-col gap-1">
+    <div class="col-span-9 flex flex-col gap-1 text-xs">
       <SearchSelectCustomerForm />
       <div v-if="customers.length" class="w-full">
         <CustomerFoundedList @onClick="handleCustomerClick" />

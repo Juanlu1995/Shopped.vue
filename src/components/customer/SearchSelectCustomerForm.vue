@@ -9,8 +9,9 @@ import debounce from 'lodash/debounce';
 import { storeToRefs } from 'pinia';
 import { getCurrentInstance, onMounted, onUnmounted, ref, watch } from 'vue';
 
-const { customers, setCustomerSelected, setCustomers, setCustomerSearchText } = useCustomerStore();
-const {customerSearch} = storeToRefs(useCustomerStore());
+const { customers, setCustomerSelected, setCustomers, setCustomerSearchText } =
+  useCustomerStore();
+const { customerSearch } = storeToRefs(useCustomerStore());
 const instance = getCurrentInstance();
 const uuid = ref(instance?.uid.toString());
 
@@ -50,7 +51,7 @@ const handleSubmit = async () => {
     const customer = await createCustomerService(customerSearch.value);
     setCustomerSelected(customer);
     setCustomerSearchText('');
-    cleanCustomerSearch();
+    socketStopListen();
   } catch (e) {
     // TODO - toast an error
     console.error(e);
@@ -68,28 +69,20 @@ watch(customerSearch, (newInput) => {
 </script>
 
 <template>
-  <form @submit.prevent="handleSubmit" class="grid grid-cols-8 gap-2">
+  <form @submit.prevent="handleSubmit" class="grid grid-cols-8 gap-2 items-end">
     <div class="col-span-7 relative flex flex-col mx-1">
+      <label :for="uuid" class="">Search / Create customer</label>
       <input
         :id="uuid"
         name="customer"
         :class="{ 'rounded-b-none': customers.length }"
         class="py-4 grow peer px-2 bg-slate-50 rounded-md h-fit focus:outline-none border"
         type="search"
+        placeholder="Search / Create customer"
         v-model.trim="customerSearch" />
-      <label
-        :for="uuid"
-        class="-top-7 absolute pointer-events-none mb-0 max-w-[90%] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 dark:text-neutral-400 dark:peer-focus:text-primary"
-        :class="{
-          'scale-75 -left-2': customerSearch.length,
-          'peer-focus:-translate-x-2 peer-[&:not(:focus)]:translate-x-2 peer-[&:not(:focus)]:translate-y-9 transition-all duration-150 ease-out peer-focus:scale-75 peer-focus:text-primary motion-reduce:transition-none':
-            !customerSearch,
-        }">
-        Search / Create customer
-      </label>
     </div>
     <button
-      class="h-fit p-2 rounded hover:ring-offset-2 hover:ring-2 hover:ring-gray-900 active:ring-cyan-400">
+      class="h-full rounded hover:bg-gray-300 ring-1 ring-inset hover:ring-2 hover:text-base ring-gray-400 active:ring-gray-600">
       Create
     </button>
   </form>
