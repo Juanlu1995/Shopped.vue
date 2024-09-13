@@ -1,18 +1,21 @@
 # shopped-vue
 
-This template should help get you started developing with Vue 3 in Vite.
+A neighborhood shop for everybody.
+
+## Application description
+
+This project is intended to be an application to help small shops to manage their sales. Shopped it was conceived as a web application that allows the users (store employees) manage their sales with the customers, as well have a register of their sales and of their customers, customers debts across multiple shops.
+
+## Applications stack
+
+The application is build with Vite. The interface is made with Vue.js.
+All the project uses TypeScript as main programming language and use pnpm as package manager.
+Tests are made with Vitest and Playwright.
 
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
 
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
 
