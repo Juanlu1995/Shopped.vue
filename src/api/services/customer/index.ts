@@ -4,8 +4,10 @@ import type {
   SearchCustomerSocketServiceReturn,
   ServerToClientEvents,
 } from '@/api/services/customer/types';
+import { useToastStore } from '@/stores/useToastStore';
 import type { Customer } from '@/types';
 import { io, Socket } from 'socket.io-client';
+
 let socket: Socket<ServerToClientEvents, ClientToServerEvents> | null = null;
 
 export const createCustomerService = async (

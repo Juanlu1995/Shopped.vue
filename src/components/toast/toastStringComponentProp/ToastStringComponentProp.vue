@@ -13,5 +13,5 @@ const isStringProp = typeof prop === 'string';
     <component :is="prop" />
   </div>
 
-  <span v-else>{{ prop }}</span>
+  <p v-else>{{ prop }}</p>
 </template>
