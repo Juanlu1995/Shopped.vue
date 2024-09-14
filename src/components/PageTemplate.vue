@@ -2,6 +2,7 @@
 import Navbar from '@/components/NavbarComponent.vue';
 import Footer from '@/components/FooterComponent.vue';
 import { useSlots } from 'vue';
+import ToastContainer from '@/components/toast/ToastContainer.vue';
 
 const slots = useSlots();
 if (!slots?.default) {
@@ -26,5 +27,7 @@ if (!slots?.default) {
         <Footer />
       </slot>
     </footer>
+
+    <ToastContainer/>
   </div>
 </template>
