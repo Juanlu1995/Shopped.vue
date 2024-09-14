@@ -10,19 +10,21 @@ const { toasts } = storeToRefs(useToastStore());
 </script>
 
 <template>
-  <TransitionGroup tag="ToastComponent">
-    <ToastComponent v-for="toast in toasts" :key="toast.id" :id="toast.id">
-      <template #title>
+  <div class="fixed bottom-2 right-2 flex flex-col-reverse gap-2">
+    <TransitionGroup>
+      <ToastComponent v-for="toast in toasts" :key="toast.id" :id="toast.id">
+        <template #title>
+          <ToastStringComponentProp
+            :prop="toast.title"
+            :classes="propClasses.title" />
+        </template>
         <ToastStringComponentProp
-          :prop="toast.title"
-          :classes="propClasses.title" />
-      </template>
-      <ToastStringComponentProp
-        v-if="toast.description"
-        :prop="toast.description"
-        :classes="propClasses.description" />
-    </ToastComponent>
-  </TransitionGroup>
+          v-if="toast.description"
+          :prop="toast.description"
+          :classes="propClasses.description" />
+      </ToastComponent>
+    </TransitionGroup>
+  </div>
 </template>
 
 <style>
@@ -33,6 +35,6 @@ const { toasts } = storeToRefs(useToastStore());
 .v-enter-from,
 .v-leave-to {
   width: 0;
-  opacity:0;
+  opacity: 0;
 }
 </style>

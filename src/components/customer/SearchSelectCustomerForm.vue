@@ -4,10 +4,12 @@ import {
   searchCustomerSocketService,
 } from '@/api/services/customer';
 import { useCustomerStore } from '@/stores/useCustomerStore';
+import { useToastStore } from '@/stores/useToastStore';
 import type { Customer } from '@/types';
 import debounce from 'lodash/debounce';
 import { storeToRefs } from 'pinia';
 import { getCurrentInstance, onMounted, onUnmounted, ref, watch } from 'vue';
+const { setToastError } = useToastStore();
 
 const { customers, setCustomerSelected, setCustomers, setCustomerSearchText } =
   useCustomerStore();
@@ -53,8 +55,10 @@ const handleSubmit = async () => {
     setCustomerSearchText('');
     socketStopListen();
   } catch (e) {
-    // TODO - toast an error
     console.error(e);
+    setToastError({
+      description: 'There has been an error creating the customer',
+    });
   }
 };
 

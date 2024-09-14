@@ -1,4 +1,4 @@
-import type { SetToast } from '@/stores/useToastStore/types';
+import type { SetToast, SetToastType } from '@/stores/useToastStore/types';
 import { parseOptionalStringComponentProp } from '@/stores/useToastStore/utils';
 import type { Toast } from '@/types';
 import { defineStore } from 'pinia';
@@ -11,7 +11,11 @@ export const useToastStore = defineStore('toast', () => {
       title: 'Title',
       id: 'id',
       type: 'ERROR',
-    },
+    }, {
+      title: 'Title',
+      id: 'ida',
+      type: 'ERROR',
+    }
   ]);
 
   const setToast: SetToast = (toast) => {
@@ -41,9 +45,26 @@ export const useToastStore = defineStore('toast', () => {
     toasts.value = toasts.value.filter((toast) => toast.id !== id);
   };
 
+  const setToastError: SetToastType = (toast) => {
+    setToast({ ...toast, type: 'ERROR' });
+  };
+  const setToastInfo: SetToastType = (toast) => {
+    setToast({ ...toast, type: 'INFO' });
+  };
+  const setToastSuccess: SetToastType = (toast) => {
+    setToast({ ...toast, type: 'SUCCESS' });
+  };
+  const setToastWarning: SetToastType = (toast) => {
+    setToast({ ...toast, type: 'WARNING' });
+  };
+
   return {
-    toasts,
-    setToast,
     removeToast,
+    setToast,
+    setToastError,
+    setToastInfo,
+    setToastSuccess,
+    setToastWarning,
+    toasts,
   };
 });

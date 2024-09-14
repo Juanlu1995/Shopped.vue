@@ -5,3 +5,5 @@ export type SetToast = (
     id?: Toast['id'];
   },
 ) => void;
+
+export type SetToastType = (toast: Omit<Toast, 'id' | 'type'>) => void;
