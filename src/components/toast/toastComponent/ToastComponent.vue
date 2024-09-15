@@ -35,7 +35,7 @@ const percentageTimer = computed(
 
 <template>
   <div
-    class="h-28 py-1 rounded-md sticky"
+    class="min-h-28 py-1 rounded-md sticky"
     :class="TOAST_TYPE_CLASS[type]"
     role="alert">
     <button class="absolute -right-1 -top-1" aria-label="Close toast" @click="handleRemove">
