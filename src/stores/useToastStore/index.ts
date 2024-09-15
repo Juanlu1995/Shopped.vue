@@ -6,17 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ref } from 'vue';
 
 export const useToastStore = defineStore('toast', () => {
-  const toasts = ref<Toast[]>([
-    {
-      title: 'Title',
-      id: 'id',
-      type: 'ERROR',
-    }, {
-      title: 'Title',
-      id: 'ida',
-      type: 'ERROR',
-    }
-  ]);
+  const toasts = ref<Toast[]>([]);
 
   const setToast: SetToast = (toast) => {
     if (!toast.id) {

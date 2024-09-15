@@ -8,7 +8,7 @@ export interface Customer {
   deleted_at: string;
 }
 
-enum ToastType {
+export enum ToastType {
   INFO = 'INFO',
   WARNING = 'WARNING',
   ERROR = 'ERROR',
