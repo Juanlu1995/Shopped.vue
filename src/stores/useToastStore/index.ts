@@ -15,6 +15,7 @@ export const useToastStore = defineStore('toast', () => {
 
     toast.title = parseOptionalStringComponentProp(toast.title);
     toast.description = parseOptionalStringComponentProp(toast.description);
+    toast.footer = parseOptionalStringComponentProp(toast.footer);
 
     toasts.value = [...toasts.value, toast as Toast];
   };

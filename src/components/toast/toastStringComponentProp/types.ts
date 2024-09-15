@@ -1,1 +1,1 @@
-export type PossiblePropClass = 'title' | 'description';
+export type PossiblePropClass = 'title' | 'description' | 'footer';

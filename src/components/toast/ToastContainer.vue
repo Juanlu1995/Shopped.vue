@@ -22,6 +22,12 @@ const { toasts } = storeToRefs(useToastStore());
           v-if="toast.description"
           :prop="toast.description"
           :classes="propClasses.description" />
+        <template #footer>
+          <ToastStringComponentProp
+          v-if="toast.footer"
+          :prop="toast.footer"
+          :classes="propClasses.footer" />
+        </template>
       </ToastComponent>
     </TransitionGroup>
   </div>

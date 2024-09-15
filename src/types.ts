@@ -19,5 +19,6 @@ export interface Toast {
   id: string;
   title?: Component | string;
   description?: Component | string;
+  footer?: Component | string;
   type: keyof typeof ToastType;
 }
