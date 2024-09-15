@@ -25,3 +25,6 @@ const modalInactive = computed(() => !modal.value?.innerHTML);
   </div>
   <RouterView />
 </template>
+<style>
+@import url('https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css');
+</style>
