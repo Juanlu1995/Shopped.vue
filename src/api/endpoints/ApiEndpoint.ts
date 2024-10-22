@@ -1,4 +1,5 @@
 type Endpoint = { [key: string]: ApiEndpoint };
+const PATH_PARAMS_REGEX = /(\/:(\w*))/g;
 
 export class ApiEndpoint {
   private endpoint: string;
@@ -31,11 +32,12 @@ export class ApiEndpoint {
       },
     });
   }
+
   set setBaseUri(base: string) {
     this.baseUri = base;
   }
 
-  setSubPath(name: string, subpath?: string): void {
+  addSubPath(name: string, subpath?: string): void {
     this.subpaths[name] = new ApiEndpoint(subpath ?? name, this);
   }
 
@@ -49,9 +51,35 @@ export class ApiEndpoint {
       return `${this.parent.toUrl()}/${this.endpoint}`;
     }
 
+    return this.endpoint ? `/${this.endpoint}` : '';
+  }
+
+  buildUrl(pathParams?: { [key: string]: string } = []): string {
+    let url = this.toUrl();
+
+    const foundedParams = url.match(PATH_PARAMS_REGEX);
+
+    if (
+      foundedParams &&
+      Array.from(foundedParams).length !== Object.entries(pathParams).length
+    ) {
+      throw new Error(
+        `Invalid params for url:\nurl: ${this.toUrl()}\nparams: ${pathParams}`,
+      );
+    }
+
+    if (foundedParams) {
+      for (const param of foundedParams) {
+        url = url.replace(
+          param.toString().substring(1),
+          pathParams[param.toString().substring(2)],
+        );
+      }
+    }
+
     return new URL(
-      this.endpoint ? `/${this.endpoint}` : '',
+      url,
       import.meta.env.VITE_API_PATH || window.location.host,
-    ).toString().slice(0, -1);
+    ).toString();
   }
 }
