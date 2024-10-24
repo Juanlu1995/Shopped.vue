@@ -1,60 +1,28 @@
 <script lang="ts" setup>
-import {
-  createCustomerService,
-  searchCustomerSocketService,
-} from '@/api/services/customer';
+import { createCustomerService, searchCustomer } from '@/api/services/customer';
 import { useCustomerStore } from '@/stores/useCustomerStore';
 import { useToastStore } from '@/stores/useToastStore';
-import type { Customer } from '@/types';
 import debounce from 'lodash/debounce';
 import { storeToRefs } from 'pinia';
-import { getCurrentInstance, h, onMounted, onUnmounted, ref, watch } from 'vue';
+import { watch } from 'vue';
 const { setToastError } = useToastStore();
 
-const { customers, setCustomerSelected, setCustomers, setCustomerSearchText } =
+const { setCustomerSelected, setCustomers, setCustomerSearchText } =
   useCustomerStore();
-const { customerSearch } = storeToRefs(useCustomerStore());
-const instance = getCurrentInstance();
-const uuid = ref(instance?.uid.toString());
+const { customerSearch, customers } = storeToRefs(useCustomerStore());
 
-const listener = (customers: Customer[]) => {
-  setCustomers(customers);
-};
-
-const socketListen = () => {
-  searchCustomerSocketService.listen(listener);
-};
-const socketStopListen = () => {
-  searchCustomerSocketService.stopListen();
-};
-
-const cleanCustomerSearch = () => {
-  socketStopListen();
-  setCustomers([]);
-};
-
-const debounceInput = debounce((newInput: string) => {
+const debounceInput = debounce(async (newInput: string) => {
   if (newInput) {
-    searchCustomerSocketService.listen;
-    searchCustomerSocketService.query(newInput);
+    const customersFound = await searchCustomer(newInput);
+    setCustomers(customersFound);
   }
-});
+}, 500);
 
-onMounted(() => {
-  searchCustomerSocketService.connect();
-  socketListen();
-});
-onUnmounted(() => {
-  searchCustomerSocketService.disconnect();
-});
-
-const handleSubmit = async () => {
-  if (!customerSearch.value) return;
+const handleSubmit = debounce(async () => {
   try {
     const customer = await createCustomerService(customerSearch.value);
     setCustomerSelected(customer);
     setCustomerSearchText('');
-    socketStopListen();
   } catch (e) {
     console.error(e);
     setToastError({
@@ -64,14 +32,13 @@ const handleSubmit = async () => {
       ]),
     });
   }
-};
+});
 
-watch(customerSearch, (newInput) => {
+watch([customerSearch, customers], ([newInput]) => {
   if (newInput) {
-    socketListen();
     debounceInput(newInput);
   } else {
-    cleanCustomerSearch();
+    setCustomers([]);
   }
 });
 </script>
