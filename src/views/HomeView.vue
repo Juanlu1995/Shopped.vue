@@ -8,7 +8,6 @@ import CustomerSearchBar from '@/components/customer/CustomerSearchBar.vue';
   <PageTemplate>
     <Container>
       <CustomerSearchBar />
-
     </Container>
   </PageTemplate>
 </template>
