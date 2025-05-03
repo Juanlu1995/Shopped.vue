@@ -4,10 +4,11 @@ const PATH_PARAMS_REGEX = /(\/:(\w*))/g;
 export class ApiEndpoint {
   private endpoint: string;
   private parent: ApiEndpoint | null;
-  private subpaths: Endpoint;
+  private subPaths: Endpoint;
+  private baseUri: string;
 
   // Index signature to support dynamic property access
-  [key: string]: any;
+  // [key: string]: any;
 
   constructor(endpoint: string, parent: ApiEndpoint | null = null) {
     const normalizedEndpoint =
@@ -15,19 +16,19 @@ export class ApiEndpoint {
 
     this.endpoint = normalizedEndpoint;
     this.parent = parent;
-    this.subpaths = {};
+    this.subPaths = {};
     this.baseUri = '';
 
     return new Proxy(this, {
-      get: (target: ApiEndpoint, prop: string) => {
-        if (typeof prop === 'string' && prop in target.subpaths) {
-          return target.subpaths[prop];
+      get: (target: ApiEndpoint, prop: string): ApiEndpoint => {
+        if (typeof prop === 'string' && prop in target.subPaths) {
+          return target.subPaths[prop];
         }
         if (prop in target) {
           return (target as any)[prop];
         }
         const newEndpoint = new ApiEndpoint(prop.toString(), target);
-        target.subpaths[prop.toString()] = newEndpoint;
+        target.subPaths[prop.toString()] = newEndpoint;
         return newEndpoint;
       },
     });
@@ -37,13 +38,13 @@ export class ApiEndpoint {
     this.baseUri = base;
   }
 
-  addSubPath(name: string, subpath?: string): void {
-    this.subpaths[name] = new ApiEndpoint(subpath ?? name, this);
+  addSubPath(name: string, subPath?: string): void {
+    this.subPaths[name] = new ApiEndpoint(subPath ?? name, this);
   }
 
   add(endpoint: ApiEndpoint, name = '') {
     endpoint.parent = this;
-    this.subpaths[name || endpoint.endpoint] = endpoint;
+    this.subPaths[name || endpoint.endpoint] = endpoint;
   }
 
   toUrl(): string {
@@ -54,7 +55,7 @@ export class ApiEndpoint {
     return this.endpoint ? `/${this.endpoint}` : '';
   }
 
-  buildUrl(pathParams?: { [key: string]: string } = []): string {
+  buildUrl(pathParams: { [key: string]: string } = {}): string {
     let url = this.toUrl();
 
     const foundedParams = url.match(PATH_PARAMS_REGEX);
@@ -78,8 +79,9 @@ export class ApiEndpoint {
     }
 
     return new URL(
-      url,
-      import.meta.env.VITE_API_PATH || window.location.host,
+      `/api${url}`,
+      `${window.location.protocol}//${window.location.host}`,
+      //(import.meta.env.VITE_VITE_API_PATH || window.location.host),
     ).toString();
   }
 }

@@ -9,6 +9,15 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const launchEditor = env.DEVTOOLS_LAUNCH_EDITOR;
   return {
+    server: {
+      proxy: {
+        '^/api/.*': {
+          target: env.VITE_API_PATH,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
+      },
+    },
     plugins: [
       vue({
         template: {
